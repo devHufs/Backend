@@ -2,22 +2,11 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-v*r(9b2is_86h3h4sy2mzkjx-o--a&+ax((j#)w$hj1m*bw2!e'
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = []
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -161,8 +150,9 @@ SOCIALACCOUNT_PROVIDERS = {
 
 from dotenv import load_dotenv
 import os
+load_dotenv()
 
-SECRET_KEY = "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"
+SECRET_KEY = os.getenv("SOCIAL_AUTH_GOOGLE_SECRET ")
 
 
 REST_FRAMEWORK = {
