@@ -3,7 +3,9 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('allauth.urls')),
+    path('api/accounts/', include('allauth.urls')),
+    path('api/accounts/', include('accounts.urls')),
+    #path('accounts/', include('accounts.urls')),
     # path('mypage/', include('mypage.urls')),
     # path('', include('iamport.urls')),
     # path('', include('store.urls')),
