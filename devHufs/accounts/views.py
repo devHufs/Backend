@@ -1,103 +1,3 @@
-# from .models import *
-# from rest_framework import status
-# from rest_framework.views import View
-# from rest_framework.response import Response
-# import requests
-# import jwt
-# from django.http import JsonResponse
-# from dotenv import load_dotenv
-# import os
-# from django.conf import settings
-
-
-# class GoogleLoginView(View):
-#     def get(self, request, *args, **kwargs):
-#         token = request.headers["Authorization"]
-#         #url = 'https://oauth2.googleapis.com/tokeninfo?id_token='
-#         url = 'https://oauth2.googleapis.com/tokeninfo?access_token='
-#         response = requests.get(url + token)
-#         user = response.json()
-#         user_sub = user.get('sub', None)
-
-#         wef_key = settings.SECRET_KEY
-
-#         none_member_type = 1  # none_member_type 변수 정의
-
-#         if User.objects.filter(social_login_id=user_sub).exists():
-#             user_info = User.objects.get(social_login_id=user_sub)
-#             encoded_jwt = jwt.encode({'id': user_sub}, wef_key, algorithm='HS256')
-
-#             return JsonResponse({
-#                 'access_token': encoded_jwt.decode('UTF-8'),
-#                 'user_name': user['name'],
-#                 'user_type': none_member_type,
-#                 'user_pk': user_info.id
-#             }, status=200)
-        
-#         else:
-#             new_user_info = User(
-#                 social_login_id=user_sub,
-#                 name=user['name'],
-#                 social=GoogleLogin.objects.get(platform="google"),
-#                 email=user.get('email', None)
-#             )
-#             new_user_info.save()
-#             encoded_jwt = jwt.encode({'id': new_user_info.id}, wef_key, algorithm='HS256')
-
-#             return JsonResponse({
-#                 'access_token': encoded_jwt.decode('UTF-8'),
-#                 'user_name': new_user_info.name,
-#                 'user_type': none_member_type,
-#                 'user_pk': new_user_info.id,
-#             }, status=200)
-        
-# # import requests
-# # from django.http import JsonResponse
-# # from django.views import View
-# # from django.conf import settings
-
-
-# # class GoogleLoginView(View):
-# #     def get(self, request, *args, **kwargs):
-# #         oauth_token = request.GET.get('oauthToken')  # Assuming the token is passed as a query parameter
-# #         user_info = self.get_sns_user_model(oauth_token)
-# #         return JsonResponse({
-# #             'sub': user_info.sub,
-# #             'name': user_info.name,
-# #             'given_name': user_info.given_name,
-# #             'family_name': user_info.family_name,
-# #             'picture': user_info.picture,
-# #             'email': user_info.email,
-# #             'email_verified': user_info.email_verified,
-# #             'locale': user_info.locale,
-# #         })
-
-#     # def get_sns_user_model(self, oauth_token):
-#     #     user_api_google = "https://openidconnect.googleapis.com/v1/userinfo?access_token="
-#     #     headers = {
-#     #         'Authorization': f'Bearer {oauth_token}'
-#     #     }
-#     #     response = requests.get(user_api_google + oauth_token, headers=headers)
-
-#     #     if response.status_code == 200:
-#     #         user_data = response.json()
-#     #         user_model = UserModel(
-#     #             sub=user_data.get('sub', None),
-#     #             name=user_data.get('name', None),
-#     #             given_name=user_data.get('given_name', None),
-#     #             family_name=user_data.get('family_name', None),
-#     #             picture=user_data.get('picture', None),
-#     #             email=user_data.get('email', None),
-#     #             email_verified=user_data.get('email_verified', False),
-#     #             locale=user_data.get('locale', None),
-#     #         )
-#     #         return user_model
-#     #     else:
-#     #         # Handle error, you might want to raise an exception or return a default UserModel
-#     #         pass
-
-
-
 import os
 from django.shortcuts import redirect
 from json import JSONDecodeError
@@ -107,27 +7,27 @@ import os
 from rest_framework import status
 from .models import *
 from allauth.socialaccount.models import SocialAccount
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 state = os.environ.get("STATE")
 # BASE_URL = 'http://localhost:8000/'
 BASE_URL = 'http://127.0.0.1:8000/'
 GOOGLE_CALLBACK_URI = BASE_URL + 'api/accounts/google/callback/'
 
-# client_id = '737061732619-j4odeagmc041qbsakpu0jlljvetroqaa.apps.googleusercontent.com'
 
 # 구글 로그인
 def google_login(request):
     scope = "https://www.googleapis.com/auth/userinfo.email"
-    client_id = "737061732619-j4odeagmc041qbsakpu0jlljvetroqaa.apps.googleusercontent.com"
+    client_id = os.getenv("SOCIAL_AUTH_GOOGLE_CLIENT_ID")
     #os.environ.get("SOCIAL_AUTH_GOOGLE_CLIENT_ID")
     return redirect(f"https://accounts.google.com/o/oauth2/v2/auth?client_id={client_id}&response_type=code&redirect_uri={GOOGLE_CALLBACK_URI}&scope={scope}")
 
 
 def google_callback(request):
-    client_id = "737061732619-j4odeagmc041qbsakpu0jlljvetroqaa.apps.googleusercontent.com"
-    #os.environ.get("SOCIAL_AUTH_GOOGLE_CLIENT_ID")
-    client_secret = "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"
-    #os.environ.get("SOCIAL_AUTH_GOOGLE_SECRET")
+    client_id = os.getenv("SOCIAL_AUTH_GOOGLE_CLIENT_ID")
+    client_secret = os.getenv("SOCIAL_AUTH_GOOGLE_SECRET")
     code = request.GET.get('code')
 
     # 1. 받은 코드로 구글에 access token 요청
