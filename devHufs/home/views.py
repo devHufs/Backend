@@ -64,7 +64,7 @@ class ContentDetail(APIView):
         course.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-
+#특정 게시물의 댓글 조회, 댓글 달기
 class CommentList(APIView):
 	# authentication_classes = [SessionAuthentication, BasicAuthentication]
 	# permission_classes = [IsAuthenticatedOrReadOnly]
@@ -85,7 +85,7 @@ class CommentList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-    
+#특정 댓글 조회, 수정, 삭제    
 class CommentDetail(APIView):
     # authentication_classes = [SessionAuthentication, BasicAuthentication]
     # permission_classes = [IsOwnerOrReadOnly]
@@ -116,7 +116,7 @@ class CommentDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-
+#---------아래는 User모델 추가 후 수정 필요--------------------
 # #좋아요 달기
 # @api_view(['POST'])
 # def like(request, post_id):
