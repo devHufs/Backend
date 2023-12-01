@@ -26,9 +26,12 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_framework_simplejwt',
+    #'rest_framework_simplejwt',
     'dj_rest_auth',
     'dj_rest_auth.registration',
+
+    # 토큰 받아오기
+    #'rest_framework_simplejwt.token_blacklist',
 
 ]
 
@@ -135,16 +138,16 @@ SITE_ID = 1
 #AUTH_USER_MODEL = 'user.User'
 REST_USE_JWT = True
 
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None # username 필드 사용 x
-ACCOUNT_EMAIL_REQUIRED = True            # email 필드 사용 o
-ACCOUNT_USERNAME_REQUIRED = False        # username 필드 사용 x
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# ACCOUNT_USER_MODEL_USERNAME_FIELD = None # username 필드 사용 x
+# ACCOUNT_EMAIL_REQUIRED = True            # email 필드 사용 o
+# ACCOUNT_USERNAME_REQUIRED = False        # username 필드 사용 x
+# ACCOUNT_AUTHENTICATION_METHOD = 'email'
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'SCOPE': [
             'profile',
-            #'email',
+            'email',
         ],
         'AUTH_PARAMS': {
             'access_type': 'online',
@@ -153,14 +156,13 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 from dotenv import load_dotenv
-import os
 load_dotenv()
 
-SECRET_KEY = os.getenv("SOCIAL_AUTH_GOOGLE_SECRET ")
+SECRET_KEY = "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"
 
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework_simplejwt.authentication.JWTAuthentication',
+#     )
+# }
