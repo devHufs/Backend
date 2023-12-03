@@ -49,7 +49,7 @@ class GetAccessToken(APIView):
 ## http://127.0.0.1:8000/api/accounts/google/login/get_id_token/
 ## Headers에 Authorization으로 엑세스 토큰값 넣기
 
-## 
+## python3 manage.py runserver 0:8000
 
 
 
