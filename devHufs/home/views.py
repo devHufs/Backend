@@ -7,6 +7,7 @@ from rest_framework.decorators import api_view
 import datetime
 from .serializers import *
 from .models import *
+from accounts.models import *
 
 from rest_framework.parsers import MultiPartParser, FormParser
 
@@ -117,36 +118,36 @@ class CommentDetail(APIView):
 
 
 #---------아래는 User모델 추가 후 수정 필요--------------------
-# #좋아요 달기
-# @api_view(['POST'])
-# def like(request, post_id):
-#     content = Content.objects.get(pk=post_id)
-#     user = User.objects.get(pk=user_id)
+#좋아요 달기
+@api_view(['POST'])
+def like(request, post_id):
+    content = Content.objects.get(pk=post_id)
+    user = User.objects.get(pk=user_id)
     
-#     if content.like_users.filter(pk=user_id).exists():
-#         content.like_users.remove(user)
-#         content.like_cnt -= 1
-#         content.save()
-#         return Response(status=status.HTTP_200_OK)
-#     else:
-#         content.like_users.add(user)
-#         content.like_cnt += 1
-#         content.save()
-#         return Response(status=status.HTTP_200_OK)
+    if content.like_users.filter(pk=user_id).exists():
+        content.like_users.remove(user)
+        content.like_cnt -= 1
+        content.save()
+        return Response(status=status.HTTP_200_OK)
+    else:
+        content.like_users.add(user)
+        content.like_cnt += 1
+        content.save()
+        return Response(status=status.HTTP_200_OK)
 
-# #스크랩하기
-# @api_view(['POST'])
-# def scrap(request, post_id):
-#     content = Content.objects.get(pk=post_id)
-#     user = User.objects.get(pk=user_id)
+#스크랩하기
+@api_view(['POST'])
+def scrap(request, post_id):
+    content = Content.objects.get(pk=post_id)
+    user = User.objects.get(pk=user_id)
     
-#     if content.scrap_users.filter(pk=user_id).exists():
-#         content.scrap_users.remove(user)
-#         content.scrap_cnt -= 1
-#         content.save()
-#         return Response(status=status.HTTP_200_OK)
-#     else:
-#         content.scrap_users.add(user)
-#         content.scrap_cnt += 1
-#         content.save()
-#         return Response(status=status.HTTP_200_OK)
+    if content.scrap_users.filter(pk=user_id).exists():
+        content.scrap_users.remove(user)
+        content.scrap_cnt -= 1
+        content.save()
+        return Response(status=status.HTTP_200_OK)
+    else:
+        content.scrap_users.add(user)
+        content.scrap_cnt += 1
+        content.save()
+        return Response(status=status.HTTP_200_OK)

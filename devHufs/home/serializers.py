@@ -15,8 +15,8 @@ class ContentSerilaizer(serializers.ModelSerializer):
 
     class Meta:
         model = Content
-        fields = ['id', 'title', 'date', 'body', 'attached', 'like_cnt', 'comment_cnt', 'scrap_cnt'] 
-        read_only_fields = ['like_cnt', 'comment_cnt', 'scrap_cnt']
+        fields = ['id', 'title', 'user', 'date', 'body', 'attached', 'like_cnt', 'comment_cnt', 'scrap_cnt'] 
+        read_only_fields = ['user', 'like_cnt', 'comment_cnt', 'scrap_cnt']
         #like_users, scrap_users, users, comments 필드 필요시 추가
 
 
@@ -33,13 +33,13 @@ class CommentListSerializer(serializers.ModelSerializer):
         return serializer.data
     
 
-# class LikeSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Content
-#         fields = ['like_users', 'like_cnt']
+class LikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Content
+        fields = ['like_users', 'like_cnt']
 
 
-# class ScrapSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Content
-#         fields = ['scrap_users', 'scrap_cnt']
+class ScrapSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Content
+        fields = ['scrap_users', 'scrap_cnt']
