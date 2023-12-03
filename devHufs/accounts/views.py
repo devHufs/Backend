@@ -39,10 +39,11 @@ class GetAccessToken(APIView):
 
         if status_code == 200:
             user_info = HttpResponse(response_text)
-            if user_info['hd'] == "hufs.ac.kr":
-                return user_info
-            else:
-                return 'hufs 계정 아님'
+            # if user_info['hd'] == "hufs.ac.kr":
+            #     return user_info
+            # else:
+            #     return 'hufs 계정 아님'
+            return user_info
         else:
             return Response(status_code)
 
