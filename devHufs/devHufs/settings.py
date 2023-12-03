@@ -38,7 +38,15 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+# CORS 에러
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:3000",
+    "http://127.0.0.1:8000"]
+CORS_ALLOW_CREDENTIALS = True
+
 
 ROOT_URLCONF = 'devHufs.urls'
 
@@ -66,8 +74,13 @@ WSGI_APPLICATION = 'devHufs.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'devHufs_test',
+        #BASE_DIR / 'db.sqlite3',
+        'USER' : 'root',
+        'PASSWORD' : '2311',
+        'HOST' : 'svc.sel4.cloudtype.app',
+        'PORT' : '30087'
     }
 }
 
