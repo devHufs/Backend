@@ -19,7 +19,7 @@ from django.shortcuts import get_object_or_404, get_list_or_404
 class ContentList(APIView):
     queryset = Content.objects.all()
     serializer_class = ContentSerilaizer
-    parser_classes = (MultiPartParser, FormParser) #parser
+    # parser_classes = (MultiPartParser, FormParser) #parser
 
     def get(self, request, **kwargs):
         file_queryset = Content.objects.all()
@@ -27,11 +27,13 @@ class ContentList(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, **kwargs):
-        data = request.data.copy()
-        now = datetime.datetime.now()
-        data['attached'].name = now.strftime('%Y-%m-%d %H:%M:%S')+'.pdf'
+        #data = request.data.copy()
+        #now = datetime.datetime.now()
+        #data['attached'].name = now.strftime('%Y-%m-%d %H:%M:%S')+'.pdf'
 
-        serializer = ContentSerilaizer(data = data)
+        #serializer = ContentSerilaizer(data = data)
+        serializer = ContentSerilaizer(data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
