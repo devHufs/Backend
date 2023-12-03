@@ -26,11 +26,13 @@ class ContentList(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, **kwargs):
-        data = request.data.copy()
-        now = datetime.datetime.now()
+        #data = request.data.copy()
+        #now = datetime.datetime.now()
         #data['attached'].name = now.strftime('%Y-%m-%d %H:%M:%S')+'.pdf'
 
-        serializer = ContentSerilaizer(data = data)
+        #serializer = ContentSerilaizer(data = data)
+        serializer = ContentSerilaizer(data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
