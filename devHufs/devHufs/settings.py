@@ -21,14 +21,11 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
 
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_framework_simplejwt',
     'dj_rest_auth',
-    'dj_rest_auth.registration',
+    'dj_rest_auth.registration'
 
 ]
 
@@ -121,46 +118,6 @@ import os
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# 구글로그인 관련
-AUTHENTICATION_BACKENDS = (
-	# Needed to login by username in Django admin, regardless of 'allauth'
-	'django.contrib.auth.backends.ModelBackend',
-
-	# 'allauth' specific authentication methods, such as login by email
-    'allauth.account.auth_backends.AuthenticationBackend',
-)
-
-SITE_ID = 1
-
-#AUTH_USER_MODEL = 'user.User'
-REST_USE_JWT = True
-
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None # username 필드 사용 x
-ACCOUNT_EMAIL_REQUIRED = True            # email 필드 사용 o
-ACCOUNT_USERNAME_REQUIRED = False        # username 필드 사용 x
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': [
-            'profile',
-            #'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        }
-    }
-}
-
-from dotenv import load_dotenv
-import os
-load_dotenv()
-
-SECRET_KEY = os.getenv("SOCIAL_AUTH_GOOGLE_SECRET ")
 
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
-}
+SECRET_KEY = "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"
