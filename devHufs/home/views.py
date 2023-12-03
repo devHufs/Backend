@@ -18,7 +18,7 @@ from django.shortcuts import get_object_or_404, get_list_or_404
 class ContentList(APIView):
     queryset = Content.objects.all()
     serializer_class = ContentSerilaizer
-    parser_classes = (MultiPartParser, FormParser) #parser
+    # parser_classes = (MultiPartParser, FormParser) #parser
 
     def get(self, request, **kwargs):
         file_queryset = Content.objects.all()
