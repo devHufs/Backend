@@ -28,7 +28,7 @@ class ContentList(APIView):
     def post(self, request, **kwargs):
         data = request.data.copy()
         now = datetime.datetime.now()
-        data['attached'].name = now.strftime('%Y-%m-%d %H:%M:%S')+'.pdf'
+        #data['attached'].name = now.strftime('%Y-%m-%d %H:%M:%S')+'.pdf'
 
         serializer = ContentSerilaizer(data = data)
         if serializer.is_valid():
