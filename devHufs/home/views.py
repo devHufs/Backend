@@ -17,12 +17,12 @@ from django.shortcuts import get_object_or_404, get_list_or_404
 #게시물 생성, 전체 조회
 class ContentList(APIView):
     queryset = Content.objects.all()
-    serializer_class = ContentSerilaizer
+    serializer_class = ContentSerializer
     # parser_classes = (MultiPartParser, FormParser) #parser
 
     def get(self, request, **kwargs):
         file_queryset = Content.objects.all()
-        serializer = ContentSerilaizer(file_queryset, many=True)
+        serializer = ContentSerializer(file_queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, **kwargs):
@@ -31,13 +31,13 @@ class ContentList(APIView):
         #data['attached'].name = now.strftime('%Y-%m-%d %H:%M:%S')+'.pdf'
 
         #serializer = ContentSerilaizer(data = data)
-        serializer = ContentSerilaizer(data=request.data)
+        serializer = ContentSerializer(data=request.data)
 
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response("invalid request", status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 #특정게시물 조회, 수정, 삭제
 class ContentDetail(APIView):
@@ -50,12 +50,12 @@ class ContentDetail(APIView):
     
     def get(self, request, post_id):
         content = self.get_object(post_id)
-        serializer = ContentSerilaizer(content)
+        serializer = ContentSerializer(content)
         return Response(serializer.data)
     
     def put(self, request, post_id):
         content = self.get_object(post_id)
-        serializer = ContentSerilaizer(content, data=request.data, partial=True)
+        serializer = ContentSerializer(content, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
