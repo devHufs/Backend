@@ -7,6 +7,7 @@ from rest_framework.decorators import api_view
 import datetime
 from .serializers import *
 from .models import *
+from accounts.models import *
 
 from rest_framework.parsers import MultiPartParser, FormParser
 
@@ -26,12 +27,17 @@ class ContentList(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, **kwargs):
-        #data = request.data.copy()
-        #now = datetime.datetime.now()
-        #data['attached'].name = now.strftime('%Y-%m-%d %H:%M:%S')+'.pdf'
+        # data = request.data.copy()
+        # now = datetime.datetime.now()
+        # data['attached'].name = now.strftime('%Y-%m-%d %H:%M:%S')+'.pdf'
 
+<<<<<<< HEAD
+        # serializer = ContentSerilaizer(data = data)
+        serializer = ContentSerilaizer(data=request.data)
+=======
         #serializer = ContentSerilaizer(data = data)
         serializer = ContentSerializer(data=request.data)
+>>>>>>> 14d331b535a9613164739d5bf23c17b9fb86dc87
 
         if serializer.is_valid():
             serializer.save()
