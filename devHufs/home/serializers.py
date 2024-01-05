@@ -8,7 +8,7 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['content_num']
 
-class ContentSerilaizer(serializers.ModelSerializer):
+class ContentSerializer(serializers.ModelSerializer):
     # comments = serializers.SerializerMethodField() #댓글 불러옴
     # likes = serializers.SerializerMethodField()
     # scraps = serializers.SerializerMethodField()

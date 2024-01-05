@@ -8,7 +8,7 @@ ALLOWED_HOSTS = ['port-0-backend-1gksli2alpp0ksdw.sel4.cloudtype.app', '127.0.0.
 
 # Application definition
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -73,24 +73,24 @@ WSGI_APPLICATION = 'devHufs.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'devHufs_test',
-#         #BASE_DIR / 'db.sqlite3',
-#         'USER' : 'root',
-#         'PASSWORD' : '2311',
-#         'HOST' : 'svc.sel4.cloudtype.app',
-#         'PORT' : '30087'
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'devHufs_test',
+        #'BASE_DIR' : 'db.sqlite3',
+        'USER' : 'root',
+        'PASSWORD' : '2311',
+        'HOST' : 'svc.sel4.cloudtype.app',
+        'PORT' : '30087'
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
 
