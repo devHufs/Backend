@@ -6,7 +6,7 @@ DEBUG = True
 #ALLOWED_HOSTS = ['port-0-backend-1gksli2alpp0ksdw.sel4.cloudtype.app', '127.0.0.1']
 # ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,[::1]").split(",")
 
-ALLOWED_HOSTS = ['https://devhufs-devhufs.koyeb.app/', '127.0.0.1']
+ALLOWED_HOSTS = ['devhufs-devhufs.koyeb.app', '127.0.0.1']
 
 # Application definition
 INSTALLED_APPS = [
@@ -85,6 +85,13 @@ WSGI_APPLICATION = 'devHufs.wsgi.application'
 #         'PORT' : '30087'
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 
 DATABASES = {

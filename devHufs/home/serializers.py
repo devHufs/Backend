@@ -16,7 +16,7 @@ class ContentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Content
         fields = ['id', 'title', 'date', 'body', 'attached', 'like_cnt', 'comment_cnt', 'scrap_cnt'] 
-        read_only_fields = ['like_cnt', 'comment_cnt', 'scrap_cnt']
+        read_only_fields = ['user', 'like_cnt', 'comment_cnt', 'scrap_cnt']
         #like_users, scrap_users, users, comments 필드 필요시 추가
 
 
