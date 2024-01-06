@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 from django.core.management.utils import get_random_secret_key
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'home',
+    "url.apps.UrlConfig",
 
     # 구글로그인 관련
     'django.contrib.sites',
