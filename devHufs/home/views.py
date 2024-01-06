@@ -31,7 +31,7 @@ class ContentList(APIView):
         # now = datetime.datetime.now()
         # data['attached'].name = now.strftime('%Y-%m-%d %H:%M:%S')+'.pdf'
 
-        #serializer = ContentSerilaizer(data = data)
+        # serializer = ContentSerilaizer(data = data)
         serializer = ContentSerializer(data=request.data)
 
         if serializer.is_valid():

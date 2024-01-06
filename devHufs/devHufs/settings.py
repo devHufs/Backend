@@ -1,10 +1,16 @@
 from pathlib import Path
+import os
+from django.core.management.utils import get_random_secret_key
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-DEBUG = True
-# ALLOWED_HOSTS = ['port-0-backend-1gksli2alpp0ksdw.sel4.cloudtype.app', '127.0.0.1']
+#DEBUG = True
+#ALLOWED_HOSTS = ['port-0-backend-1gksli2alpp0ksdw.sel4.cloudtype.app', '127.0.0.1']
 
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', get_random_secret_key())
 
 # Application definition
 INSTALLED_APPS = [
@@ -16,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'home',
+    "url.apps.UrlConfig",
 
     # 구글로그인 관련
     'django.contrib.sites',
@@ -40,13 +47,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 # CORS 에러
-CORS_ORIGIN_WHITELIST = [
-    "http://localhost:3000",
-    "http://127.0.0.1:8000"]
-CORS_ALLOW_CREDENTIALS = True
+# CORS_ORIGIN_WHITELIST = [
+#     "http://localhost:3000",
+#     "http://127.0.0.1:8000"]
+# CORS_ALLOW_CREDENTIALS = True
 
 
 ROOT_URLCONF = 'devHufs.urls'
@@ -77,7 +85,6 @@ WSGI_APPLICATION = 'devHufs.wsgi.application'
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
 #         'NAME': 'devHufs_test',
-#         #'BASE_DIR' : 'db.sqlite3',
 #         'USER' : 'root',
 #         'PASSWORD' : '2311',
 #         'HOST' : 'svc.sel4.cloudtype.app',
@@ -91,7 +98,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 
 
@@ -129,7 +135,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+#STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -142,5 +151,16 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
+# from django.core.exceptions import ImproperlyConfigured
 
-SECRET_KEY = "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"
+# def get_env_variable(var_name):
+#     try:
+#         return os.environ[var_name]
+#     except KeyError:
+#         error_msg = f"Set the {var_name} environment variable"
+#         raise ImproperlyConfigured(error_msg)
+
+# # Whitenoise configuration
+# STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
