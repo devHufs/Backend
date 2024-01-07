@@ -1,1 +1,0 @@
-web: gunicorn devHufs.wsgi --log-file -
