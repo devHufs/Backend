@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'home',
     'gunicorn',
     #'url.apps.UrlConfig',
+    # 왜 안 됨
 
     # 구글로그인 관련
     'django.contrib.sites',
