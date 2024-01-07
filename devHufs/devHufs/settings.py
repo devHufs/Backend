@@ -22,7 +22,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'home',
-    "url.apps.UrlConfig",
+    # 'url',
+    'url.apps.UrlConfig',
 
     # 구글로그인 관련
     'django.contrib.sites',
