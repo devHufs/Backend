@@ -22,7 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'home',
-    "url.apps.UrlConfig",
+    'url.apps.UrlConfig',
 
     # 구글로그인 관련
     'django.contrib.sites',
@@ -51,10 +51,10 @@ MIDDLEWARE = [
 ]
 
 # CORS 에러
-# CORS_ORIGIN_WHITELIST = [
-#     "http://localhost:3000",
-#     "http://127.0.0.1:8000"]
-# CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:3000",
+    "http://127.0.0.1:8000"]
+CORS_ALLOW_CREDENTIALS = True
 
 
 ROOT_URLCONF = 'devHufs.urls'
@@ -137,7 +137,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-#STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 # Default primary key field type
