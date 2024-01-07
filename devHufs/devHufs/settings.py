@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'home',
+    'gunicorn',
     #'url.apps.UrlConfig',
 
     # 구글로그인 관련
