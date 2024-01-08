@@ -1,15 +1,13 @@
-#from django.db import models
-# from django.contrib.auth.models import AbstractUser
-# from allauth.socialaccount.models import SocialApp
-
-# class GoogleLogin(models.Model):
-#     platform = models.CharField(max_length=20, default = 0)
-
-#     class Meta:
-#         db_table = 'google_login'
-
-# class User(models.Model):
-#     social = models.ForeignKey(GoogleLogin, on_delete=models.CASCADE, max_length=20, blank=True, default=1)
-#     social_login_id = models.CharField(max_length=50, blank=True)
+from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 
+# class UserProfile(models.Model):
+#     user_id = models.CharField(max_length=100, unique=True, null=False)
+#     email = models.EmailField(max_length=100, unique=True, null=False)
+#     name = models.CharField(max_length=100)
+#     pic = models.ImageField(blank=True, null=True)
+#     student_num = models.IntegerField(unique=True, blank=True, null=True, default=0)
+#     job = models.CharField(max_length=100, blank=True, null=True, default="")
+#     #stack = ArrayField(models.CharField(max_length=10), blank=True, null=True)
+#     # 어떤 db 쓰느냐에 따라 달라짐
