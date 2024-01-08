@@ -6,6 +6,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = True
 #ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 #SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', get_random_secret_key())
+
+#AWS 배포로 비밀키 임의설정
 SECRET_KEY = "&$^vt362+8*9s+izw2o8vcl2mzs3dl7t7f6*&j%c1x4^hp_=b+"
 ALLOWED_HOSTS = [
     ".ap-northeast-2.compute.amazonaws.com"
