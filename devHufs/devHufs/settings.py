@@ -7,12 +7,9 @@ DEBUG = True
 #ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 #SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', get_random_secret_key())
 
-#AWS 배포로 비밀키 임의설정
-# SECRET_KEY = "&$^vt362+8*9s+izw2o8vcl2mzs3dl7t7f6*&j%c1x4^hp_=b+"
-ALLOWED_HOSTS = [
-    # ".ap-northeast-2.compute.amazonaws.com"
-    '*'
-]
+
+ALLOWED_HOSTS = ['*']
+
 
 # Application definition
 INSTALLED_APPS = [
@@ -91,6 +88,9 @@ WSGI_APPLICATION = 'devHufs.wsgi.application'
 #         'PORT' : '30087'
 #     }
 # }
+
+SECRET_KEY = "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"
+
 
 DATABASES = {
     'default': {

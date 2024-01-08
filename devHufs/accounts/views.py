@@ -3,9 +3,11 @@ from django.shortcuts import redirect
 import requests
 from rest_framework import status
 from .models import *
+from .serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 
 
 ##### 백에서 직접 엑세스 토큰 + 이메일 얻음 #####
@@ -39,10 +41,13 @@ class GetAccessToken(APIView):
 
         if status_code == 200:
             user_info = HttpResponse(response_text)
-            # if user_info['hd'] == "hufs.ac.kr":
-            #     return user_info
-            # else:
-            #     return 'hufs 계정 아님'
+            # user_id = user_info.get("user_id") # 사용자의 고유 식별자 추출
+            # #id값 바뀌는지 아닌지 확인, 안 바뀌면 받는 id 그대로 사용 가능할 듯
+
+            # if not UserProfile.objects.filter(user_id=user_id).exists():
+            #     UserProfile.objects.create(user_id=user_id, email=user_info.get("email"),
+            #                 name=user_info.get("given_name"), pic=user_info.get("picture"))
+            
             return user_info
         else:
             return Response(status_code)
@@ -52,52 +57,23 @@ class GetAccessToken(APIView):
 
 ## python3 manage.py runserver 0:8000
 
-
-
-
-
-
-#################################################################
-
-    # # 3. 전달받은 이메일, access_token, code를 바탕으로 회원가입/로그인
-    # try:
-    #     # 전달받은 이메일로 등록된 유저가 있는지 탐색
-    #     user = User.objects.get(email=email)
-
-    #     # FK로 연결되어 있는 socialaccount 테이블에서 해당 이메일의 유저가 있는지 확인
-    #     social_user = SocialAccount.objects.get(user=user)
-
-    #     # 있는데 구글계정이 아니어도 에러
-    #     if social_user.provider != 'google':
-    #         return JsonResponse({'err_msg': 'no matching social type'}, status=status.HTTP_400_BAD_REQUEST)
-
-    #     # 이미 Google로 제대로 가입된 유저 => 로그인 & 해당 우저의 jwt 발급
-    #     data = {'access_token': access_token, 'code': code}
-    #     accept = requests.post(f"{BASE_URL}api/user/google/login/finish/", data=data)
-    #     accept_status = accept.status_code
-
-    #     # 뭔가 중간에 문제가 생기면 에러
-    #     if accept_status != 200:
-    #         return JsonResponse({'err_msg': 'failed to signin'}, status=accept_status)
-
-    #     accept_json = accept.json()
-    #     accept_json.pop('user', None)
-    #     return JsonResponse(accept_json)
-
-    # except User.DoesNotExist:
-    #     # 전달받은 이메일로 기존에 가입된 유저가 아예 없으면 => 새로 회원가입 & 해당 유저의 jwt 발급
-    #     data = {'access_token': access_token, 'code': code}
-    #     accept = requests.post(f"{BASE_URL}api/user/google/login/finish/", data=data)
-    #     accept_status = accept.status_code
-
-    #     # 뭔가 중간에 문제가 생기면 에러
-    #     if accept_status != 200:
-    #         return JsonResponse({'err_msg': 'failed to signup'}, status=accept_status)
-
-    #     accept_json = accept.json()
-    #     accept_json.pop('user', None)
-    #     return JsonResponse(accept_json)
+# class UserInfo(APIView):
+#     def get(self, request, user_id):
+#         user = get_object_or_404(UserProfile, id=user_id)
+#         serializer = UserSerializer(user)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+#     def patch(self, request, user_id):
+#         user = get_object_or_404(UserProfile, id=user_id)
+#         serializer = UserSerializer(user, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save(user=request.user)
+#             return Response(serializer.data, status=status.HTTP_200_OK)
+#         else:
+#             return Response(serializer.error_messages, status=status.HTTP_400_BAD_REQUEST)
+    
+#     def delete(self, request, user_id):
+#         user = get_object_or_404(UserProfile, id=user_id)
+#         user.delete()
+#         return Response({'message': '삭제됨'}, status=status.HTTP_204_NO_CONTENT)
         
-	# except SocialAccount.DoesNotExist:
-    # 	# User는 있는데 SocialAccount가 없을 때 (=일반회원으로 가입된 이메일일때)
-    #     return JsonResponse({'err_msg': 'email exists but not social user'}, status=status.HTTP_400_BAD_REQUEST)
