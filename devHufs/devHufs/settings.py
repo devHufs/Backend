@@ -9,9 +9,10 @@ DEBUG = True
 
 #AWS 배포로 비밀키 임의설정
 # SECRET_KEY = "&$^vt362+8*9s+izw2o8vcl2mzs3dl7t7f6*&j%c1x4^hp_=b+"
-# ALLOWED_HOSTS = [
-#     ".ap-northeast-2.compute.amazonaws.com"
-# ]
+ALLOWED_HOSTS = [
+    # ".ap-northeast-2.compute.amazonaws.com"
+    '*'
+]
 
 # Application definition
 INSTALLED_APPS = [
