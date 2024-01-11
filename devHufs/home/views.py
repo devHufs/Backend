@@ -12,10 +12,11 @@ from accounts.models import *
 from rest_framework.parsers import MultiPartParser, FormParser
 
 from django.shortcuts import get_object_or_404, get_list_or_404
+from django.db.models import Q
 
 # Create your views here.
 
-#게시물 생성, 전체 조회
+#게시물 전체 조회
 class ContentList(APIView):
     queryset = Content.objects.all()
     serializer_class = ContentSerializer
@@ -26,7 +27,14 @@ class ContentList(APIView):
         serializer = ContentSerializer(file_queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+# 게시물 생성
+class ContentCreate(APIView):
+    queryset = Content.objects.all()
+    serializer_class = ContentSerializer
+    # parser_classes = (MultiPartParser, FormParser) #parser
+    
     def post(self, request, **kwargs):
+        ## 파일 제목 설정
         # data = request.data.copy()
         # now = datetime.datetime.now()
         # data['attached'].name = now.strftime('%Y-%m-%d %H:%M:%S')+'.pdf'
@@ -40,11 +48,8 @@ class ContentList(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-#특정게시물 조회, 수정, 삭제
+#특정게시물 조회
 class ContentDetail(APIView):
-    # authentication_classes = [SessionAuthentication, BasicAuthentication]
-    # permission_classes = [IsOwnerOrReadOnly]
-    # permission_classes = [IsAuthenticatedOrReadOnly]
     def get_object(self, post_id):
         content = get_object_or_404(Content, pk=post_id)
         return content
@@ -53,6 +58,15 @@ class ContentDetail(APIView):
         content = self.get_object(post_id)
         serializer = ContentSerializer(content)
         return Response(serializer.data)
+
+#특정 게시물 수정  
+class ContentUpdate(APIView):
+    # authentication_classes = [SessionAuthentication, BasicAuthentication]
+    # permission_classes = [IsOwnerOrReadOnly]
+    # permission_classes = [IsAuthenticatedOrReadOnly]
+    def get_object(self, post_id):
+        content = get_object_or_404(Content, pk=post_id)
+        return content
     
     def put(self, request, post_id):
         content = self.get_object(post_id)
@@ -61,6 +75,15 @@ class ContentDetail(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#특정 게시물 삭제
+class ContentDelete(APIView):
+    # authentication_classes = [SessionAuthentication, BasicAuthentication]
+    # permission_classes = [IsOwnerOrReadOnly]
+    # permission_classes = [IsAuthenticatedOrReadOnly]
+    def get_object(self, post_id):
+        content = get_object_or_404(Content, pk=post_id)
+        return content
     
     def delete(self, request, post_id):
         course = self.get_object(post_id)
@@ -70,7 +93,8 @@ class ContentDetail(APIView):
 #특정 게시물의 댓글 조회, 댓글 달기
 class CommentList(APIView):
 	# authentication_classes = [SessionAuthentication, BasicAuthentication]
-	# permission_classes = [IsAuthenticatedOrReadOnly]
+    # permission_classes = [IsOwnerOrReadOnly]
+    # permission_classes = [IsAuthenticatedOrReadOnly]
     def get(self, request, post_id):
         content = Content.objects.get(pk=post_id)
         comments = Comment.objects.filter(content_num=content)
@@ -119,12 +143,33 @@ class CommentDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-#---------아래는 User모델 추가 후 수정 필요--------------------
+#게시물 검색 (제목, 내용)
+@api_view(['GET'])
+def search(request, search):
+    contents = Content.objects.filter(Q(title__contains = search)|Q(body__contains = search))
+    if contents.exists():
+        serializer = ContentSerializer(contents, many=True)
+        return Response(serializer.data)
+    else:
+        return Response("No result")
+    
+#게시물 필터링 (기술스택)
+@api_view(['GET'])
+def search(request, search_stack):
+    contents = Content.objects.filter(Q(stack__contains = search_stack)) #stack 데이터타입 보고 수정 예정
+    if contents.exists():
+        serializer = ContentSerializer(contents, many=True)
+        return Response(serializer.data)
+    else:
+        return Response("No result")
+
+
+#---------아래는 User모델 추가 후 주석풀기 필요--------------------
 # #좋아요 달기
 # @api_view(['POST'])
-# def like(request, post_id):
+# def like(request, post_id, user_id):
 #     content = Content.objects.get(pk=post_id)
-#     user = User.objects.get(pk=user_id)
+#     user = Usertemporal.objects.get(pk=user_id)
     
 #     if content.like_users.filter(pk=user_id).exists():
 #         content.like_users.remove(user)
@@ -139,9 +184,9 @@ class CommentDetail(APIView):
 
 # #스크랩하기
 # @api_view(['POST'])
-# def scrap(request, post_id):
+# def scrap(request, post_id, user_id):
 #     content = Content.objects.get(pk=post_id)
-#     user = User.objects.get(pk=user_id)
+#     user = Usertemporal.objects.get(pk=user_id)
     
 #     if content.scrap_users.filter(pk=user_id).exists():
 #         content.scrap_users.remove(user)
@@ -153,3 +198,10 @@ class CommentDetail(APIView):
 #         content.scrap_cnt += 1
 #         content.save()
 #         return Response(status=status.HTTP_200_OK)
+    
+# #특정 유저가 작성한 글 조회
+# @api_view(['GET'])
+# def content_with_user(request, user_id):
+#     contents = Content.objects.filter(user=user_id)
+#     serializer = ContentSerializer(contents, many=True)
+#     return Response(serializer.data)
