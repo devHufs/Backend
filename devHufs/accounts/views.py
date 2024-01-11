@@ -33,38 +33,86 @@ class GoogleUserApi:
         return response.status_code, response.text
 
 
+
+# class GetAccessToken(APIView):
+#     def get(self, request, **kwarg):
+#         access_token = request.headers.get("Authorization")
+#         google_user_api = GoogleUserApi(base_url="https://www.googleapis.com")
+#         status_code, response_text = google_user_api.get_user_info(access_token)
+
+#         if status_code == 200:
+#             user_info = HttpResponse(response_text)
+#             # user_id = user_info.get("user_id") # 사용자의 고유 식별자 추출
+#             # #id값 바뀌는지 아닌지 확인, 안 바뀌면 받는 id 그대로 사용 가능할 듯
+
+#             # if not UserProfile.objects.filter(user_id=user_id).exists():
+#             #     UserProfile.objects.create(user_id=user_id, email=user_info.get("email"),
+#             #                 name=user_info.get("given_name"), pic=user_info.get("picture"))
+            
+#             return user_info
+#         else:
+#             return Response(status_code)
+
+from django.http import JsonResponse
+
+# class GetAccessToken(APIView):
+#     def get(self, request, **kwargs):
+#         access_token = request.headers.get("Authorization")
+#         google_user_api = GoogleUserApi(base_url="https://www.googleapis.com")
+#         status_code, response_text = google_user_api.get_user_info(access_token)
+
+#         if status_code == 200:
+#             user_info = JsonResponse(response_text, safe=False).json()
+#             email = user_info.get("email")
+
+#             if not UserProfile.objects.filter(email=email).exists():
+#                 UserProfile.objects.create(
+#                     email=email,
+#                     name=user_info.get("given_name"),
+#                     pic=user_info.get("picture"),
+#                 )
+
+#             return JsonResponse(user_info, safe=False)
+#         else:
+#             return Response(status_code)
+
+from json import loads
+
+# ...
+
 class GetAccessToken(APIView):
-    def get(self, request, **kwarg):
+    def get(self, request, **kwargs):
         access_token = request.headers.get("Authorization")
         google_user_api = GoogleUserApi(base_url="https://www.googleapis.com")
         status_code, response_text = google_user_api.get_user_info(access_token)
 
         if status_code == 200:
-            user_info = HttpResponse(response_text)
-            # user_id = user_info.get("user_id") # 사용자의 고유 식별자 추출
-            # #id값 바뀌는지 아닌지 확인, 안 바뀌면 받는 id 그대로 사용 가능할 듯
+            user_info = loads(response_text)  # 직접 JSON 파싱
+            email = user_info.get("email")
 
-            # if not UserProfile.objects.filter(user_id=user_id).exists():
-            #     UserProfile.objects.create(user_id=user_id, email=user_info.get("email"),
-            #                 name=user_info.get("given_name"), pic=user_info.get("picture"))
-            
-            return user_info
+            if not UserProfile.objects.filter(email=email).exists():
+                UserProfile.objects.create(
+                    email=email,
+                    name=user_info.get("given_name"),
+                    pic=user_info.get("picture"),
+                )
+
+            return JsonResponse(user_info, safe=False)
         else:
             return Response(status_code)
-
 ## http://127.0.0.1:8000/api/accounts/google/login/get_id_token/
 ## Headers에 Authorization으로 엑세스 토큰값 넣기
 
 ## python3 manage.py runserver 0:8000
 
 # class UserInfo(APIView):
-#     def get(self, request, user_id):
-#         user = get_object_or_404(UserProfile, id=user_id)
+#     def get(self, request, email):
+#         user = get_object_or_404(UserProfile, email=email)
 #         serializer = UserSerializer(user)
 #         return Response(serializer.data, status=status.HTTP_200_OK)
     
-#     def patch(self, request, user_id):
-#         user = get_object_or_404(UserProfile, id=user_id)
+#     def patch(self, request, email):
+#         user = get_object_or_404(UserProfile, email=email)
 #         serializer = UserSerializer(user, data=request.data)
 #         if serializer.is_valid():
 #             serializer.save(user=request.user)
@@ -72,8 +120,27 @@ class GetAccessToken(APIView):
 #         else:
 #             return Response(serializer.error_messages, status=status.HTTP_400_BAD_REQUEST)
     
-#     def delete(self, request, user_id):
-#         user = get_object_or_404(UserProfile, id=user_id)
+#     def delete(self, request, email):
+#         user = get_object_or_404(UserProfile, email=email)
 #         user.delete()
 #         return Response({'message': '삭제됨'}, status=status.HTTP_204_NO_CONTENT)
         
+class UserInfo(APIView):
+    def get(self, request, email):
+        user = get_object_or_404(UserProfile, email=email)
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def patch(self, request, email):
+        user = get_object_or_404(UserProfile, email=email)
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, email):
+        user = get_object_or_404(UserProfile, email=email)
+        user.delete()
+        return Response({'message': '삭제됨'}, status=status.HTTP_204_NO_CONTENT)
