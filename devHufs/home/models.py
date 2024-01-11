@@ -9,7 +9,7 @@ class Content(models.Model):
     body = models.TextField(default="")
     date = models.DateTimeField(auto_now_add=True)
     #둘 중 하나는 필수입력으로 들어가야 함
-    attached = models.FileField(upload_to='uploads/')
+    attached = models.FileField(upload_to='uploads/', null=True)
     # link = models.URLField(max_length=200, null=True)
 
     # stack = ArrayField(models.CharField(max_length=10), blank=True, null=True)
