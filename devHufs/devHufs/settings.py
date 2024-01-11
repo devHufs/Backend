@@ -11,7 +11,6 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 SECRET_KEY = "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"
 
-
 # Application definition
 INSTALLED_APPS = [
     # 'django.contrib.admin',

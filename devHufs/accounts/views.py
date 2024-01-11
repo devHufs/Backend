@@ -33,6 +33,8 @@ class GoogleUserApi:
         return response.status_code, response.text
 
 
+
+
 class GetAccessToken(APIView):
     def get(self, request, **kwarg):
         access_token = request.headers.get("Authorization")
@@ -41,16 +43,25 @@ class GetAccessToken(APIView):
 
         if status_code == 200:
             user_info = HttpResponse(response_text)
-            # user_id = user_info.get("user_id") # 사용자의 고유 식별자 추출
-            # #id값 바뀌는지 아닌지 확인, 안 바뀌면 받는 id 그대로 사용 가능할 듯
-
-            # if not UserProfile.objects.filter(user_id=user_id).exists():
-            #     UserProfile.objects.create(user_id=user_id, email=user_info.get("email"),
-            #                 name=user_info.get("given_name"), pic=user_info.get("picture"))
-            
-            return user_info
+            if user_info['hd'] == "hufs.ac.kr":
+                return user_info
+            else:
+                return 'hufs 계정 아님'
         else:
             return Response(status_code)
+
+        # if status_code == 200:
+        #     user_info = HttpResponse(response_text)
+        #     # user_id = user_info.get("user_id") # 사용자의 고유 식별자 추출
+        #     # #id값 바뀌는지 아닌지 확인, 안 바뀌면 받는 id 그대로 사용 가능할 듯
+
+        #     # if not UserProfile.objects.filter(user_id=user_id).exists():
+        #     #     UserProfile.objects.create(user_id=user_id, email=user_info.get("email"),
+        #     #                 name=user_info.get("given_name"), pic=user_info.get("picture"))
+            
+        #     return user_info
+        # else:
+        #     return Response(status_code)
 
 ## http://127.0.0.1:8000/api/accounts/google/login/get_id_token/
 ## Headers에 Authorization으로 엑세스 토큰값 넣기
