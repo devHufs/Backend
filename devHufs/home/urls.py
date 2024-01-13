@@ -19,8 +19,8 @@ urlpatterns = [
     # path('filter/<str:search_stack>/', filter, name='filter'),
 
     # User모델 추가 후 주석 풀기
-    # path('<int:post_id>/like/<int:user_id>/', like, name='like'),
-    # path('<int:post_id>/scrap/<int:user_id>/', scrap, name='scrap'),
-    # path('<int:user_id>/contents/', content_with_user)
+    path('<int:post_id>/like/<int:user_id>/', like, name='like'),
+    path('<int:post_id>/scrap/<int:user_id>/', scrap, name='scrap'),
+    path('<int:user_id>/contents/', content_with_user)
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
