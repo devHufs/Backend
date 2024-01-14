@@ -78,7 +78,6 @@ from django.http import JsonResponse
 
 from json import loads
 
-# ...
 
 class GetAccessToken(APIView):
     def get(self, request, **kwargs):
