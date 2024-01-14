@@ -169,7 +169,7 @@ def search(request, search):
 @api_view(['POST'])
 def like(request, post_id, user_id):
     content = Content.objects.get(pk=post_id)
-    user = Usertemporal.objects.get(pk=user_id)
+    user = UserProfile.objects.get(pk=user_id)
     
     if content.like_users.filter(pk=user_id).exists():
         content.like_users.remove(user)
@@ -186,7 +186,7 @@ def like(request, post_id, user_id):
 @api_view(['POST'])
 def scrap(request, post_id, user_id):
     content = Content.objects.get(pk=post_id)
-    user = Usertemporal.objects.get(pk=user_id)
+    user = UserProfile.objects.get(pk=user_id)
     
     if content.scrap_users.filter(pk=user_id).exists():
         content.scrap_users.remove(user)
