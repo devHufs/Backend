@@ -35,22 +35,22 @@ class CommentListSerializer(serializers.ModelSerializer):
     
 
 #User모델 연결 후 주석풀기
-class LikeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Content
-        fields = ['like_users', 'like_cnt']
+# class LikeSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Content
+#         fields = ['like_users', 'like_cnt']
 
-class ScrapSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Content
-        fields = ['scrap_users', 'scrap_cnt']
+# class ScrapSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Content
+#         fields = ['scrap_users', 'scrap_cnt']
 
-class LikesWithUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserProfile
-        fields = ['like_contents']
+# class LikesWithUserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = UserProfile
+#         fields = ['like_contents']
 
-class ScrapsWithUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserProfile
-        fields = ['scrap_contents']
+# class ScrapsWithUserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = UserProfile
+#         fields = ['scrap_contents']
