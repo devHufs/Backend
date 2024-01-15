@@ -19,12 +19,12 @@ from django.db.models import Q
 #게시물 전체 조회
 class ContentList(APIView):
     queryset = Content.objects.all()
-    serializer_class = ContentSerializer
+    serializer_class = ContentListSerializer
     # parser_classes = (MultiPartParser, FormParser) #parser
 
     def get(self, request, **kwargs):
         file_queryset = Content.objects.all()
-        serializer = ContentSerializer(file_queryset, many=True)
+        serializer = ContentListSerializer(file_queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 # 게시물 생성
@@ -33,14 +33,19 @@ class ContentCreate(APIView):
     serializer_class = ContentSerializer
     # parser_classes = (MultiPartParser, FormParser) #parser
     
-    def post(self, request, **kwargs):
+    def post(self, request, user_id, **kwargs):
         ## 파일 제목 설정
         # data = request.data.copy()
         # now = datetime.datetime.now()
         # data['attached'].name = now.strftime('%Y-%m-%d %H:%M:%S')+'.pdf'
 
-        # serializer = ContentSerilaizer(data = data)
-        serializer = ContentSerializer(data=request.data)
+        # serializer = ContentSerializer(data = data)
+
+        user_profile = UserProfile.objects.get(pk=user_id)
+        data1 = request.data.copy()
+        data1['user'] = user_profile.id
+
+        serializer = ContentSerializer(data=data1)
 
         if serializer.is_valid():
             serializer.save()
@@ -90,7 +95,31 @@ class ContentDelete(APIView):
         course.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-#특정 게시물의 댓글 조회, 댓글 달기
+
+    
+#특정 게시물에 댓글 달기
+class CommentCreate(APIView):
+    # authentication_classes = [SessionAuthentication, BasicAuthentication]
+    # permission_classes = [IsOwnerOrReadOnly]
+    # permission_classes = [IsAuthenticatedOrReadOnly]
+    def post(self, request, post_id, user_id):
+        content = Content.objects.get(pk=post_id)
+        user_profile = UserProfile.objects.get(pk=user_id)
+
+        data1 = request.data.copy()
+        data1['comment_user'] = user_profile.id
+        data1['content_num'] = content.id
+            
+        serializer = CommentSerializer(data=data1)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            content.comment_cnt += 1
+            content.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+#특정 게시물의 댓글 조회
 class CommentList(APIView):
 	# authentication_classes = [SessionAuthentication, BasicAuthentication]
     # permission_classes = [IsOwnerOrReadOnly]
@@ -100,16 +129,6 @@ class CommentList(APIView):
         comments = Comment.objects.filter(content_num=content)
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
-    
-    def post(self, request, post_id):
-        content = Content.objects.get(pk=post_id)
-        serializer = CommentSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save(content_num=content)
-            content.comment_cnt += 1
-            content.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 #특정 댓글 조회, 수정, 삭제    
@@ -148,7 +167,7 @@ class CommentDetail(APIView):
 def search(request, search):
     contents = Content.objects.filter(Q(title__contains = search)|Q(body__contains = search))
     if contents.exists():
-        serializer = ContentSerializer(contents, many=True)
+        serializer = ContentListSerializer(contents, many=True)
         return Response(serializer.data)
     else:
         return Response("No result")
@@ -171,7 +190,7 @@ def like(request, post_id, user_id):
     content = Content.objects.get(pk=post_id)
     user = UserProfile.objects.get(pk=user_id)
     
-    if content.like_users.filter(pk=user_id).exists():
+    if content.like_users.filter(pk=user.id).exists(): #테스트필요.. pk가 맞나
         content.like_users.remove(user)
         content.like_cnt -= 1
         content.save()
@@ -188,7 +207,7 @@ def scrap(request, post_id, user_id):
     content = Content.objects.get(pk=post_id)
     user = UserProfile.objects.get(pk=user_id)
     
-    if content.scrap_users.filter(pk=user_id).exists():
+    if content.scrap_users.filter(pk=user.id).exists(): #테스트 필요
         content.scrap_users.remove(user)
         content.scrap_cnt -= 1
         content.save()
@@ -201,22 +220,22 @@ def scrap(request, post_id, user_id):
     
 #특정 유저가 작성한 글 조회
 @api_view(['GET'])
-def content_with_user(request, email):
-    user_id = UserProfile.objects.get(email=email) #email에 맞는 User 불러오기 -> user_id가 맞나?
-    contents = Content.objects.filter(user=user_id) #특정 user에 맞는 content 불러오기
-    serializer = ContentSerializer(contents, many=True)
+def content_with_user(request, user_id):
+    user = UserProfile.objects.get(pk=user_id) 
+    contents = Content.objects.filter(user=user) 
+    serializer = ContentListSerializer(contents, many=True)
     return Response(serializer.data)
 
 #특정 유저가 좋아요한 글 조회
 @api_view(['GET'])
-def likes_with_user(request, email):
-    user = UserProfile.objects.get(email=email)
+def likes_with_user(request, user_id):
+    user = UserProfile.objects.get(pk=user_id)
     serializer = LikesWithUserSerializer(user)
     return Response(serializer.data)
     
 #특정 유저가 스크랩한 글 조회
 @api_view(['GET'])
-def scraps_with_user(request, email):
-    user = UserProfile.objects.get(email=email)
+def scraps_with_user(request, user_id):
+    user = UserProfile.objects.get(pk=user_id)
     serializer = ScrapsWithUserSerializer(user)
     return Response(serializer.data)
