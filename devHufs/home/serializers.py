@@ -1,24 +1,48 @@
 from rest_framework import serializers
 from .models import *
 from accounts.models import *
+from accounts.serializers import *
 
 class CommentSerializer(serializers.ModelSerializer):
+    user_profile = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
-        fields = '__all__'
+        fields = ['id', 'date', 'comment_user', 'user_profile', 'body']
         read_only_fields = ['content_num']
 
+    def get_user_profile(self, obj):
+        user_profile = obj.comment_user
+        serializer = UserSerializer(user_profile)
+        return serializer.data
+
+
 class ContentSerializer(serializers.ModelSerializer):
-    # comments = serializers.SerializerMethodField() #댓글 불러옴
+    # comments = serializers.SerializerMethodField()
+    user_profile = serializers.SerializerMethodField()
 
     class Meta:
         model = Content
-        #User모델 연결 후 'user'추가 필요
-        fields = ['id', 'title', 'date', 'user', 'body', 'job', 'link', 'attached', 'like_cnt', 'comment_cnt', 'scrap_cnt']
-        # fields = ['id', 'title', 'date', 'body', 'attached', 'like_cnt', 'comment_cnt', 'scrap_cnt']  
+        fields = ['id', 'title', 'date', 'user', 'user_profile', 'body', 'job', 'link', 'attached', 'like_cnt', 'comment_cnt', 'scrap_cnt']
         read_only_fields = ['like_cnt', 'comment_cnt', 'scrap_cnt']
-        #like_users, scrap_users, comments 필드 필요시 추가
+    
+    def get_user_profile(self, obj):
+        user_profile = obj.user
+        serializer = UserSerializer(user_profile)
+        return serializer.data
+    
+
+class ContentListSerializer(serializers.ModelSerializer):
+    user_profile = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Content
+        fields = ['id', 'title', 'date', 'user_profile', 'like_cnt', 'comment_cnt', 'scrap_cnt']
+
+    def get_user_profile(self, obj):
+        user_profile = obj.user
+        serializer = UserSerializer(user_profile)
+        return serializer.data
 
 
 class CommentListSerializer(serializers.ModelSerializer):
@@ -35,22 +59,38 @@ class CommentListSerializer(serializers.ModelSerializer):
     
 
 #User모델 연결 후 주석풀기
-class LikeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Content
-        fields = ['like_users', 'like_cnt']
+# class LikeSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Content
+#         fields = ['like_users', 'like_cnt']
 
-class ScrapSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Content
-        fields = ['scrap_users', 'scrap_cnt']
+# class ScrapSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Content
+#         fields = ['scrap_users', 'scrap_cnt']
 
 class LikesWithUserSerializer(serializers.ModelSerializer):
+    contents = serializers.SerializerMethodField()
+
     class Meta:
         model = UserProfile
-        fields = ['like_contents']
+        fields = ['contents']
+
+    def get_contents(self, obj):
+        liked_contents = obj.like_contents.all()
+        serializer = ContentListSerializer(liked_contents, many=True)
+        return serializer.data
+
+
 
 class ScrapsWithUserSerializer(serializers.ModelSerializer):
+    contents = serializers.SerializerMethodField()
+
     class Meta:
         model = UserProfile
-        fields = ['scrap_contents']
+        fields = ['contents']
+
+    def get_contents(self, obj):
+        scrapped_contents = obj.scrap_contents.all()
+        serializer = ContentListSerializer(scrapped_contents, many=True)
+        return serializer.data
