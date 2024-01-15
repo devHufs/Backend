@@ -201,7 +201,22 @@ def scrap(request, post_id, user_id):
     
 #특정 유저가 작성한 글 조회
 @api_view(['GET'])
-def content_with_user(request, user_id):
-    contents = Content.objects.filter(user=user_id)
+def content_with_user(request, email):
+    user_id = UserProfile.objects.get(email=email)
+    contents = Content.objects.filter(user=user_id) #user_id 불러오기
     serializer = ContentSerializer(contents, many=True)
+    return Response(serializer.data)
+
+#특정 유저가 좋아요한 글 조회
+@api_view(['GET'])
+def likes_with_user(request, email):
+    user = UserProfile.objects.get(email=email)
+    serializer = LikesWithUserSerializer(user)
+    return Response(serializer.data)
+    
+#특정 유저가 스크랩한 글 조회
+@api_view(['GET'])
+def scraps_with_user(request, email):
+    user = UserProfile.objects.get(email=email)
+    serializer = ScrapsWithUserSerializer(user)
     return Response(serializer.data)
