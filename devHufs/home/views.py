@@ -164,59 +164,59 @@ def search(request, search):
 #         return Response("No result")
 
 
-#---------아래는 User모델 추가 후 주석풀기 필요--------------------
-#좋아요 달기
-@api_view(['POST'])
-def like(request, post_id, user_id):
-    content = Content.objects.get(pk=post_id)
-    user = UserProfile.objects.get(pk=user_id)
+# #---------아래는 User모델 추가 후 주석풀기 필요--------------------
+# #좋아요 달기
+# @api_view(['POST'])
+# def like(request, post_id, user_id):
+#     content = Content.objects.get(pk=post_id)
+#     user = UserProfile.objects.get(pk=user_id)
     
-    if content.like_users.filter(pk=user_id).exists():
-        content.like_users.remove(user)
-        content.like_cnt -= 1
-        content.save()
-        return Response(status=status.HTTP_200_OK)
-    else:
-        content.like_users.add(user)
-        content.like_cnt += 1
-        content.save()
-        return Response(status=status.HTTP_200_OK)
+#     if content.like_users.filter(pk=user_id).exists():
+#         content.like_users.remove(user)
+#         content.like_cnt -= 1
+#         content.save()
+#         return Response(status=status.HTTP_200_OK)
+#     else:
+#         content.like_users.add(user)
+#         content.like_cnt += 1
+#         content.save()
+#         return Response(status=status.HTTP_200_OK)
 
-#스크랩하기
-@api_view(['POST'])
-def scrap(request, post_id, user_id):
-    content = Content.objects.get(pk=post_id)
-    user = UserProfile.objects.get(pk=user_id)
+# #스크랩하기
+# @api_view(['POST'])
+# def scrap(request, post_id, user_id):
+#     content = Content.objects.get(pk=post_id)
+#     user = UserProfile.objects.get(pk=user_id)
     
-    if content.scrap_users.filter(pk=user_id).exists():
-        content.scrap_users.remove(user)
-        content.scrap_cnt -= 1
-        content.save()
-        return Response(status=status.HTTP_200_OK)
-    else:
-        content.scrap_users.add(user)
-        content.scrap_cnt += 1
-        content.save()
-        return Response(status=status.HTTP_200_OK)
+#     if content.scrap_users.filter(pk=user_id).exists():
+#         content.scrap_users.remove(user)
+#         content.scrap_cnt -= 1
+#         content.save()
+#         return Response(status=status.HTTP_200_OK)
+#     else:
+#         content.scrap_users.add(user)
+#         content.scrap_cnt += 1
+#         content.save()
+#         return Response(status=status.HTTP_200_OK)
     
-#특정 유저가 작성한 글 조회
-@api_view(['GET'])
-def content_with_user(request, email):
-    user_id = UserProfile.objects.get(email=email)
-    contents = Content.objects.filter(user=user_id) #user_id 불러오기
-    serializer = ContentSerializer(contents, many=True)
-    return Response(serializer.data)
+# #특정 유저가 작성한 글 조회
+# @api_view(['GET'])
+# def content_with_user(request, email):
+#     user_id = UserProfile.objects.get(email=email) #email에 맞는 User 불러오기 -> user_id가 맞나?
+#     contents = Content.objects.filter(user=user_id) #특정 user에 맞는 content 불러오기
+#     serializer = ContentSerializer(contents, many=True)
+#     return Response(serializer.data)
 
-#특정 유저가 좋아요한 글 조회
-@api_view(['GET'])
-def likes_with_user(request, email):
-    user = UserProfile.objects.get(email=email)
-    serializer = LikesWithUserSerializer(user)
-    return Response(serializer.data)
+# #특정 유저가 좋아요한 글 조회
+# @api_view(['GET'])
+# def likes_with_user(request, email):
+#     user = UserProfile.objects.get(email=email)
+#     serializer = LikesWithUserSerializer(user)
+#     return Response(serializer.data)
     
-#특정 유저가 스크랩한 글 조회
-@api_view(['GET'])
-def scraps_with_user(request, email):
-    user = UserProfile.objects.get(email=email)
-    serializer = ScrapsWithUserSerializer(user)
-    return Response(serializer.data)
+# #특정 유저가 스크랩한 글 조회
+# @api_view(['GET'])
+# def scraps_with_user(request, email):
+#     user = UserProfile.objects.get(email=email)
+#     serializer = ScrapsWithUserSerializer(user)
+#     return Response(serializer.data)
