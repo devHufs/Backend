@@ -16,9 +16,9 @@ class Content(models.Model):
     # job = models.CharField(max_length=100, blank=True, default=" ", null=True) 
     
     # User 모델 연결 후 주석 풀기
-    user = models.ForeignKey(UserProfile, null=True, on_delete=models.CASCADE)
-    like_users = models.ManyToManyField(UserProfile, null=True, related_name='like_contents')
-    scrap_users = models.ManyToManyField(UserProfile, null=True, related_name='scrap_contents')
+    # user = models.ForeignKey(UserProfile, null=True, on_delete=models.CASCADE)
+    # like_users = models.ManyToManyField(UserProfile, null=True, related_name='like_contents')
+    # scrap_users = models.ManyToManyField(UserProfile, null=True, related_name='scrap_contents')
 
     like_cnt = models.IntegerField(default=0)
     comment_cnt = models.IntegerField(default=0)
