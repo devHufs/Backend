@@ -32,4 +32,4 @@ class Comment(models.Model):
     body = models.TextField(default="")
     date = models.DateTimeField(auto_now_add=True)
 
-    user = models.ForeignKey(UserProfile, null=True, on_delete=models.CASCADE)
+    # user = models.ForeignKey(UserProfile, null=True, on_delete=models.CASCADE)
