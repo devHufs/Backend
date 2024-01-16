@@ -1,6 +1,6 @@
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
-#import uuid
+# from django.contrib.postgres.fields import ArrayField
+# from django.contrib.postgres.fields import JSONField
 
 class UserProfile(models.Model):
     user_id = models.AutoField(primary_key=True)
@@ -9,4 +9,4 @@ class UserProfile(models.Model):
     pic = models.ImageField(blank=True, null=True)
     student_num = models.IntegerField(unique=True, blank=True, null=True, default=0)
     job = models.CharField(max_length=100, blank=True, null=True, default="")
-    stack = ArrayField(models.CharField(max_length=50), blank=True, default=list)
+    stack = models.JSONField(blank=True, null=True, default =None)
