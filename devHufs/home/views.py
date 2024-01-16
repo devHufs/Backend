@@ -43,7 +43,7 @@ class ContentCreate(APIView):
 
         user_profile = UserProfile.objects.get(pk=user_id)
         data1 = request.data.copy()
-        data1['user'] = user_profile.id
+        data1['user'] = user_profile.user_id
 
         serializer = ContentSerializer(data=data1)
 
@@ -107,7 +107,7 @@ class CommentCreate(APIView):
         user_profile = UserProfile.objects.get(pk=user_id)
 
         data1 = request.data.copy()
-        data1['comment_user'] = user_profile.id
+        data1['comment_user'] = user_profile.user_id
         data1['content_num'] = content.id
             
         serializer = CommentSerializer(data=data1)
@@ -190,7 +190,7 @@ def like(request, post_id, user_id):
     content = Content.objects.get(pk=post_id)
     user = UserProfile.objects.get(pk=user_id)
     
-    if content.like_users.filter(pk=user.id).exists(): #테스트필요.. pk가 맞나
+    if content.like_users.filter(pk=user.user_id).exists(): #테스트필요.. pk가 맞나
         content.like_users.remove(user)
         content.like_cnt -= 1
         content.save()
@@ -207,7 +207,7 @@ def scrap(request, post_id, user_id):
     content = Content.objects.get(pk=post_id)
     user = UserProfile.objects.get(pk=user_id)
     
-    if content.scrap_users.filter(pk=user.id).exists(): #테스트 필요
+    if content.scrap_users.filter(pk=user.user_id).exists(): #테스트 필요
         content.scrap_users.remove(user)
         content.scrap_cnt -= 1
         content.save()
