@@ -23,7 +23,7 @@ class ContentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Content
-        fields = ['id', 'title', 'date', 'user', 'user_profile', 'body', 'job', 'link', 'attached', 'like_cnt', 'comment_cnt', 'scrap_cnt']
+        fields = ['id', 'title', 'date', 'user', 'user_profile', 'body', 'job', 'stack', 'link', 'attached', 'like_cnt', 'comment_cnt', 'scrap_cnt']
         read_only_fields = ['like_cnt', 'comment_cnt', 'scrap_cnt']
     
     def get_user_profile(self, obj):
