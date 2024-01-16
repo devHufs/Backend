@@ -27,7 +27,7 @@ class Content(models.Model):
         return self.title
     
 class Comment(models.Model):
-    content_num = models.ForeignKey(Content, on_delete=models.CASCADE, null=True)
+    content_num = models.ForeignKey(Content, on_delete=models.CASCADE, null=True, related_name='comments')
     body = models.TextField(default="")
     date = models.DateTimeField(auto_now_add=True)
 

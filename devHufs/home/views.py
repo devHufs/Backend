@@ -108,7 +108,7 @@ class CommentCreate(APIView):
 
         data1 = request.data.copy()
         data1['comment_user'] = user_profile.user_id
-        data1['content_num'] = content.id
+        data1['content_num'] = content.id #수정
             
         serializer = CommentSerializer(data=data1)
         if serializer.is_valid(raise_exception=True):
@@ -119,16 +119,16 @@ class CommentCreate(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-#특정 게시물의 댓글 조회
+# 특정 게시물의 댓글 조회
 class CommentList(APIView):
 	# authentication_classes = [SessionAuthentication, BasicAuthentication]
     # permission_classes = [IsOwnerOrReadOnly]
     # permission_classes = [IsAuthenticatedOrReadOnly]
     def get(self, request, post_id):
-        content = Content.objects.get(pk=post_id)
-        comments = Comment.objects.filter(content_num=content)
+        comments = Comment.objects.filter(content_num=post_id)
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
+
 
 
 #특정 댓글 조회, 수정, 삭제    
