@@ -8,8 +8,8 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['id', 'date', 'comment_user', 'user_profile', 'body']
-        read_only_fields = ['content_num']
+        fields = ['id', 'date', 'content_num', 'comment_user', 'user_profile', 'body']
+        # read_only_fields = ['content_num']
 
     def get_user_profile(self, obj):
         user_profile = obj.comment_user
@@ -45,17 +45,18 @@ class ContentListSerializer(serializers.ModelSerializer):
         return serializer.data
 
 
-class CommentListSerializer(serializers.ModelSerializer):
-    comments = serializers.SerializerMethodField()
+# class CommentListSerializer(serializers.ModelSerializer):
+#     comments = serializers.SerializerMethodField()
 
-    class Meta:
-        model = Content
-        fields = ['comments']
+#     class Meta:
+#         model = Content
+#         fields = ['comments']
         
-    def get_comments(self, obj):
-        comments = Comment.objects.filter(content_num=obj)
-        serializer = CommentSerializer(comments, many=True)
-        return serializer.data
+#     def get_comments(self, obj):
+#         # comments = obj.comments.all()
+#         comments = Comment.objects.filter(content_num=obj)
+#         serializer = CommentSerializer(comments, many=True)
+#         return serializer.data
     
 
 #User모델 연결 후 주석풀기
