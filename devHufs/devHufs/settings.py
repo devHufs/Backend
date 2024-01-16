@@ -4,8 +4,6 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = True
-#ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
-#SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', get_random_secret_key())
 
 
 ALLOWED_HOSTS = ['*']
@@ -13,7 +11,6 @@ SECRET_KEY = "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"
 
 # Application definition
 INSTALLED_APPS = [
-    # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -74,20 +71,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'devHufs.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'devHufs_test',
-#         'USER' : 'root',
-#         'PASSWORD' : '2311',
-#         'HOST' : 'svc.sel4.cloudtype.app',
-#         'PORT' : '30087'
-#     }
-# }
 
 
 DATABASES = {
