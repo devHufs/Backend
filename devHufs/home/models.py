@@ -11,8 +11,7 @@ class Content(models.Model):
     #둘 중 하나는 필수입력으로 들어가야 함
     attached = models.FileField(upload_to='uploads/', null=True)
     link = models.URLField(max_length=200, default = " ", null=True)
-    # stack = models.ArrayField(models.CharField(max_length=10), blank=True, null=True)
-        # 어떻게 전달될지 몰라서 일단 UserProfile.stack이랑 동일하게 해놓음
+    stack = models.JSONField(blank=True, null=True, default =None)
     job = models.CharField(max_length=100, blank=True, default=" ", null=True) 
     
     # User 모델 연결 후 주석 풀기
