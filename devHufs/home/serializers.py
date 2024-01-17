@@ -20,16 +20,30 @@ class CommentSerializer(serializers.ModelSerializer):
 class ContentSerializer(serializers.ModelSerializer):
     # comments = serializers.SerializerMethodField()
     user_profile = serializers.SerializerMethodField()
+    # like_users_list = serializers.SerializerMethodField()
+    # scrap_users_list = serializers.SerializerMethodField()
 
     class Meta:
         model = Content
-        fields = ['id', 'title', 'date', 'user', 'user_profile', 'body', 'job', 'stack', 'link', 'attached', 'like_cnt', 'comment_cnt', 'scrap_cnt']
+        # fields = ['id', 'title', 'date', 'user', 'user_profile', 'body', 'job', 'stack', 'link', 'attached', 'like_cnt', 'comment_cnt', 'scrap_cnt', 'like_users_list', 'scrap_users_list']
+        fields = '__all__'
         read_only_fields = ['like_cnt', 'comment_cnt', 'scrap_cnt']
     
     def get_user_profile(self, obj):
         user_profile = obj.user
         serializer = UserSerializer(user_profile)
         return serializer.data
+    
+    # def get_like_users_list(self, obj):
+    #     like_users_list = obj.like_users
+    #     serializer = UserSerializer(like_users_list, many=True)
+    #     return serializer.data
+    
+    # def get_scrap_users_list(self, obj):
+    #     scrap_users_list = obj.scrap_users
+    #     serializer = UserSerializer(scrap_users_list, many=True)
+    #     return serializer.data
+    
     
 
 class ContentListSerializer(serializers.ModelSerializer):
