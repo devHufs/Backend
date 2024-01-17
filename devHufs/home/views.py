@@ -172,15 +172,15 @@ def search(request, search):
     else:
         return Response("No result")
     
-#게시물 필터링 (기술스택)
-# @api_view(['GET'])
-# def filter(request, search_stack):
-#     contents = Content.objects.filter(Q(stack__contains = search_stack)) #stack 데이터타입 보고 수정 예정
-#     if contents.exists():
-#         serializer = ContentSerializer(contents, many=True)
-#         return Response(serializer.data)
-#     else:
-#         return Response("No result")
+# #게시물 필터링 (기술스택)
+@api_view(['GET'])
+def filter(request, search_stack):
+    contents = Content.objects.filter(stack__icontains = search_stack) #stack 데이터타입 보고 수정 예정
+    if contents.exists():
+        serializer = ContentSerializer(contents, many=True)
+        return Response(serializer.data)
+    else:
+        return Response("No result")
 
 
 #---------아래는 User모델 추가 후 주석풀기 필요--------------------
